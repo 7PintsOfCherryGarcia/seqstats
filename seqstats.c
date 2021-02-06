@@ -8,8 +8,12 @@
 #include "klib/kseq.h"
 #include "klib/ksort.h"
 
+// 7pint's sqzlib
+#include "sqzlib.h"
+
+
 // initialize kseq
-KSEQ_INIT(gzFile, gzread)
+KSEQ_INIT(sqz_File*, sqz_sqzread)
 
 // initialize sorting and define types and sorting scheme
 #define pair_lt(a, b) ((a) < (b))
@@ -19,7 +23,7 @@ KSORT_INIT_GENERIC(long)
 
 int main(int argc, char *argv[])
 {
-  gzFile fp;
+  sqz_File fp;
   kseq_t *seq;
   int l;
   int n = 0;
@@ -38,15 +42,15 @@ int main(int argc, char *argv[])
     argv[1] = "/dev/stdin";
   }
 
-  fp = gzopen(argv[1], "r");
+  fp = sqz_sqzopen(argv[1]);
 
-  if (!fp) {
+  if (!fp.sqz | !fp.blk) {
     printf("Can't open input file.\n\n");
     printf("Usage: %s <in.fasta|in.fastq>\n", argv[0]);
     return 1;
   }
 
-  seq = kseq_init(fp);
+  seq = kseq_init(&fp);
 
   int s = 10000;
 
@@ -93,19 +97,19 @@ int main(int argc, char *argv[])
 
   kseq_destroy(seq);
   free(a);
-  gzclose(fp);
+  sqz_sqzclose(fp);
   return 0;
 
   memerr:
     printf("\n\tCould not allocate sufficient continuous memory.\n\n");
     kseq_destroy(seq);
-    gzclose(fp);
+    sqz_sqzclose(fp);
     return 1;
 
   seqerr:
     printf("\n\tSequence file is empty.\n\n");
     kseq_destroy(seq);
-    gzclose(fp);
+    sqz_sqzclose(fp);
     return 1;
 
 }
