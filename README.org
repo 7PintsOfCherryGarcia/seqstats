@@ -1,4 +1,4 @@
-* Seqstats
+* Seqstats - sqz compatible 
 Seqstats is a small tool written in C on top of the excellent
 [[https://github.com/attractivechaos/klib][klib]] library by Heng Li. It
 provides general summary statistics of both read and assembly files. It can
