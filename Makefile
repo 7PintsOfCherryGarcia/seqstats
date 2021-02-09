@@ -1,11 +1,12 @@
 CC=gcc
 
 CFLAGS=-Wall -pedantic -O2
+CINC=-I../../libs -I../..
 
-INC=-I../../libs -I../..
-LIB=-lz -lm
+LINC=-L../../
+LIB=-lsqz -lz -lm
 
 .PHONY:all clean seqstats
 
 seqstats:seqstats.c
-	gcc $(CFLAGS) $(INC) $< -Wall -O3 -lz -lm -o $@ ../../libsqz.a $(LIB)
+	$(CC) $(CFLAGS) $(CINC) $(LINC) $< -Wall -O3 -lz -lm -o $@ $(LIB)
